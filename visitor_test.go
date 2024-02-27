@@ -147,6 +147,36 @@ func getTestWalkDAG5() *DAG {
 	return dag
 }
 
+// schematic diagram:
+//
+//	v5
+//	^
+//	|
+//	v3 <-- v4 <-- v6 <--v7
+//	^      ^
+//	|      |
+//	v1     v2
+func getTestWalkDAG6() *DAG {
+	dag := NewDAG()
+
+	v1, v2, v3, v4, v5, v6, v7 := "1", "2", "3", "4", "5", "6", "7"
+	_ = dag.AddVertexByID(v1, "v1")
+	_ = dag.AddVertexByID(v2, "v2")
+	_ = dag.AddVertexByID(v3, "v3")
+	_ = dag.AddVertexByID(v4, "v4")
+	_ = dag.AddVertexByID(v5, "v5")
+	_ = dag.AddVertexByID(v6, "v6")
+	_ = dag.AddVertexByID(v7, "v7")
+	_ = dag.AddEdge(v1, v3)
+	_ = dag.AddEdge(v2, v4)
+	_ = dag.AddEdge(v4, v3)
+	_ = dag.AddEdge(v3, v5)
+	_ = dag.AddEdge(v6, v4)
+	_ = dag.AddEdge(v7, v6)
+
+	return dag
+}
+
 func TestDFSWalk(t *testing.T) {
 	cases := []struct {
 		dag      *DAG
@@ -182,6 +212,39 @@ func TestDFSWalk(t *testing.T) {
 		actual := pv.Values
 		if deep.Equal(expected, actual) != nil {
 			t.Errorf("DFSWalk() = %v, want %v", actual, expected)
+		}
+	}
+}
+
+func TestLongestChain(t *testing.T) {
+	cases := []struct {
+		dag      *DAG
+		expected string
+	}{
+		{
+			dag:      getTestWalkDAG(),
+			expected: "1",
+		},
+		{
+			dag:      getTestWalkDAG4(),
+			expected: "1",
+		},
+		{
+			dag:      getTestWalkDAG5(),
+			expected: "2",
+		},
+		{
+			dag:      getTestWalkDAG6(),
+			expected: "7",
+		},
+	}
+
+	for _, c := range cases {
+		actual := c.dag.FindNodeWithLongestChain()
+
+		expected := c.expected
+		if deep.Equal(expected, actual) != nil {
+			t.Errorf("LongestChain() = %v, want %v", actual, expected)
 		}
 	}
 }
