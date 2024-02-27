@@ -219,23 +219,23 @@ func TestDFSWalk(t *testing.T) {
 func TestLongestChain(t *testing.T) {
 	cases := []struct {
 		dag      *DAG
-		expected string
+		expected []string
 	}{
 		{
 			dag:      getTestWalkDAG(),
-			expected: "1",
+			expected: []string{"1"},
 		},
 		{
 			dag:      getTestWalkDAG4(),
-			expected: "1",
+			expected: []string{"1"},
 		},
 		{
 			dag:      getTestWalkDAG5(),
-			expected: "2",
+			expected: []string{"2", "1"},
 		},
 		{
 			dag:      getTestWalkDAG6(),
-			expected: "7",
+			expected: []string{"7", "2", "1"},
 		},
 	}
 

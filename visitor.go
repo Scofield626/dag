@@ -1,7 +1,6 @@
 package dag
 
 import (
-	//"fmt"
 	"sort"
 
 	llq "github.com/emirpasic/gods/queues/linkedlistqueue"
@@ -74,10 +73,17 @@ func (d *DAG) DFSWalkWithDepth(visitor func(v string, depth int) bool, dp map[st
 	dfs(node, 0)
 }
 
-func (d *DAG) FindNodeWithLongestChain() string {
-	var longestNode string
+func (d *DAG) FindNodeWithLongestChain() []string {
+	var longestNodes []string
 	maxDepth := 0
+	depthMap := make(map[string]int)
 
+	// Sort roots based on their depth
+	type rootDepth struct {
+		root  string
+		depth int
+	}
+	var rdSlice []rootDepth
 	dp := make(map[string]int)
 
 	vertices := d.getRoots()
@@ -85,13 +91,22 @@ func (d *DAG) FindNodeWithLongestChain() string {
 		d.DFSWalkWithDepth(func(v string, depth int) bool {
 			if depth > maxDepth {
 				maxDepth = depth
-				longestNode = root
+				depthMap[root] = depth
 			}
 			return true
 		}, dp, root)
+		rdSlice = append(rdSlice, rootDepth{root, maxDepth})
 	}
 
-	return longestNode
+	sort.Slice(rdSlice, func(i, j int) bool {
+		return rdSlice[i].depth > rdSlice[j].depth
+	})
+
+	// Retrieve the longest nodes
+	for _, rd := range rdSlice {
+		longestNodes = append(longestNodes, rd.root)
+	}
+	return longestNodes
 }
 
 // BFSWalk implements the Breadth-First-Search algorithm to traverse the entire DAG.

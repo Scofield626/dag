@@ -2,7 +2,7 @@ package dag_test
 
 import (
 	"fmt"
-	"github.com/heimdalr/dag"
+	"github.com/Scofield626/dag"
 )
 
 type idVertex struct {

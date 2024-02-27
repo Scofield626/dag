@@ -32,14 +32,17 @@ func (d *DAG) UnmarshalJSON(_ []byte) error {
 // Example:
 // dag := NewDAG()
 // data, err := json.Marshal(d)
-// if err != nil {
-//     panic(err)
-// }
+//
+//	if err != nil {
+//	    panic(err)
+//	}
+//
 // var wd YourStorableDAG
 // restoredDag, err := UnmarshalJSON(data, &wd)
-// if err != nil {
-//     panic(err)
-// }
+//
+//	if err != nil {
+//	    panic(err)
+//	}
 //
 // For more specific information please read the test code.
 func UnmarshalJSON(data []byte, wd StorableDAG) (*DAG, error) {
